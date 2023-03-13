@@ -10,6 +10,7 @@ class sudoku {
 		bool fill_remainder(int, int);
 		void fill_diag_boxes();
 		void fill_square(int, int);
+		int get_number_of_blanks(const int);
 		void delete_squares(const int);
 		bool h_valid(int, int, int) const;
 		bool v_valid(int, int, int) const;

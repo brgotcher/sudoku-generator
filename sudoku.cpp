@@ -17,9 +17,10 @@ sudoku::sudoku() : board{
 	}
 	{}
 
-void sudoku::fill_board(const int blanks) {
+void sudoku::fill_board(const int difficulty) {
 	fill_diag_boxes();
 	fill_remainder(0,3);
+	int blanks = get_number_of_blanks(difficulty);
 	delete_squares(blanks);
 }
 // randomly fill the top left, middle, and bottom right squares of 9 cells
@@ -40,6 +41,25 @@ void sudoku::fill_diag_boxes() {
 			}
 		}
 	}
+}
+
+int sudoku::get_number_of_blanks(const int difficulty) {
+	int blanks;
+	switch(difficulty) {
+		case(1):
+			blanks = 35;
+			break;
+		case(2):
+			blanks = 43;
+			break;
+		case(3):
+			blanks = 52;
+			break;
+		case(4):
+			blanks = 60;
+			break;
+	}
+	return blanks;
 }
 
 // fill out the rest of the board based on the randomized squares
@@ -89,11 +109,10 @@ void sudoku::delete_squares(const int blanks) {
 	int row{}, col{};
 	for (int i = 0; i < blanks; i++) {
 		do {
-			row = (rand() % 10);
-			col = (rand() % 10);
+			row = (rand() % 9);
+			col = (rand() % 9);
 			} while (board[row][col] == 0);
-		board[row][col] = 0;
-		
+		board[row][col] = 0;		
 	}
 }
 
