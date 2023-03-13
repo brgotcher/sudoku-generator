@@ -17,9 +17,10 @@ sudoku::sudoku() : board{
 	}
 	{}
 
-void sudoku::fill_board() {
+void sudoku::fill_board(const int blanks) {
 	fill_diag_boxes();
 	fill_remainder(0,3);
+	delete_squares(blanks);
 }
 // randomly fill the top left, middle, and bottom right squares of 9 cells
 void sudoku::fill_diag_boxes() {
@@ -83,8 +84,21 @@ bool sudoku::fill_remainder(int row, int col) {
 	return false;
 }
 
+void sudoku::delete_squares(const int blanks) {
+	srand(time(NULL));
+	int row{}, col{};
+	for (int i = 0; i < blanks; i++) {
+		do {
+			row = (rand() % 10);
+			col = (rand() % 10);
+			} while (board[row][col] == 0);
+		board[row][col] = 0;
+		
+	}
+}
+
 // check if a value is valid for the current row
-bool sudoku::h_valid(int row, int col, int val) {
+bool sudoku::h_valid(int row, int col, int val) const {
 	for (int i = 0; i < 9; i++) {
 		if (board[row][i] == val) {
 			return false;
@@ -94,7 +108,7 @@ bool sudoku::h_valid(int row, int col, int val) {
 }
 
 // check if a value is valid for the current column
-bool sudoku::v_valid(int row, int col, int val) {
+bool sudoku::v_valid(int row, int col, int val) const {
 	for (int i = 0; i < 9; i++) {
 		if (board[i][col] == val) {
 			return false;
@@ -104,7 +118,7 @@ bool sudoku::v_valid(int row, int col, int val) {
 }
 
 // check if a value is valid for the current square
-bool sudoku::s_valid(int row, int col, int val) {
+bool sudoku::s_valid(int row, int col, int val) const {
 	// get the indices of the top left cel in the current square
 	int top = row - (row % 3);
 	int left = col - (col % 3);
@@ -119,12 +133,12 @@ bool sudoku::s_valid(int row, int col, int val) {
 }
 
 // combine the previous 3 functions to verify the value is valid in the current cel
-bool sudoku::is_valid(int row, int col, int val) {
+bool sudoku::is_valid(int row, int col, int val) const {
 	return (s_valid(row, col, val) && h_valid(row, col, val) && v_valid(row, col, val));
 }
 
 
-void sudoku::print_board() {
+void sudoku::print_board() const {
 	for (int i = 0; i < 9; i++) {
 		if (i % 3 == 0) {
 			cout << " ------------------------" << endl;
